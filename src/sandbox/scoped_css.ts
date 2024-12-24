@@ -518,6 +518,15 @@ export default function scopedCSS (
         app.url,
         linkPath,
       )
+      const observer = new MutationObserver(() => {
+        const isPrefixed = styleElement.textContent && new RegExp(prefix).test(styleElement.textContent)
+        observer.disconnect()
+        if (!isPrefixed) {
+          styleElement.__MICRO_APP_HAS_SCOPED__ = false
+        }
+        scopedCSS(styleElement, app, linkPath)
+      })
+      observer.observe(styleElement, { childList: true, characterData: true })
     } else {
       const observer = new MutationObserver(function () {
         observer.disconnect()
