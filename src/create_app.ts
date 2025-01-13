@@ -52,6 +52,7 @@ export interface CreateAppParam {
   ssrUrl?: string
   isPrefetch?: boolean
   prefetchLevel?: number
+  attrs?: Record<string, string>,
   routerMode?: string
 }
 
@@ -79,6 +80,7 @@ export default class CreateApp implements AppInterface {
   public prefetchLevel?: number
   public fiber = false
   public routerMode: string
+  public attrs?: Record<string, string>
 
   constructor ({
     name,
@@ -92,6 +94,7 @@ export default class CreateApp implements AppInterface {
     isPrefetch,
     prefetchLevel,
     routerMode,
+    attrs,
   }: CreateAppParam) {
     appInstanceMap.set(name, this)
     // init actions
@@ -99,6 +102,7 @@ export default class CreateApp implements AppInterface {
     this.url = url
     this.useSandbox = useSandbox
     this.scopecss = this.useSandbox && scopecss
+    this.attrs = attrs
     // exec before getInlineModeState
     this.iframe = iframe ?? false
     this.inline = this.getInlineModeState(inline)
@@ -758,7 +762,7 @@ export default class CreateApp implements AppInterface {
    */
   private createSandbox (): void {
     if (this.useSandbox && !this.sandBox) {
-      this.sandBox = this.iframe ? new IframeSandbox(this.name, this.url) : new WithSandBox(this.name, this.url)
+      this.sandBox = this.iframe ? new IframeSandbox(this.name, this.url, { attrs: this.attrs }) : new WithSandBox(this.name, this.url)
     }
   }
 
