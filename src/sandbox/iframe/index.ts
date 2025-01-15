@@ -81,16 +81,18 @@ export default class IframeSandbox {
   // TODO: 放到 super中定义，super(appName, url)，with沙箱也需要简化
   public appName: string
   public url: string
+  public options?: Record<string, any>
   // reset mount, unmount when stop in default mode
   public clearHijackUmdHooks!: () => void
 
-  constructor (appName: string, url: string) {
+  constructor (appName: string, url: string, options: Record<string, any>) {
     this.appName = appName
     this.url = url
+    this.options = options
     const rawLocation = globalEnv.rawWindow.location
     const browserHost = rawLocation.protocol + '//' + rawLocation.host
 
-    this.deleteIframeElement = this.createIframeElement(appName, browserHost + rawLocation.pathname)
+    this.deleteIframeElement = this.createIframeElement(appName, browserHost + rawLocation.pathname, options)
     this.microAppWindow = this.iframe!.contentWindow
 
     this.patchIframe(this.microAppWindow, (resolve: CallableFunction) => {
@@ -126,10 +128,12 @@ export default class IframeSandbox {
   createIframeElement (
     appName: string,
     browserPath: string,
+    options?: Record<string, any>
   ): () => void {
     this.iframe = pureCreateElement('iframe')
 
     const iframeAttrs: Record<string, string> = {
+      ...options?.attrs,
       id: appName,
       src: microApp.options.iframeSrc || browserPath,
       style: 'display: none',

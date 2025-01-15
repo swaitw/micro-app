@@ -353,6 +353,13 @@ export function defineElement (tagName: string): void {
 
     // create app instance
     private handleCreateApp (): void {
+      const attrs: Record<string, string> = {}
+      Array.prototype.slice.call(this.attributes).forEach(({ name, value }: Attr) => {
+        if (name.startsWith('data-')) {
+          attrs[name] = value
+        }
+      })
+
       const createAppInstance = () => new CreateApp({
         name: this.appName,
         url: this.appUrl,
@@ -363,6 +370,7 @@ export function defineElement (tagName: string): void {
         iframe: this.getDisposeResult('iframe'),
         ssrUrl: this.ssrUrl,
         routerMode: this.getMemoryRouterMode(),
+        attrs
       })
 
       /**
