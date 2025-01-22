@@ -294,10 +294,11 @@ function patchWindowEffect (microAppWindow: microAppWindowType, appName: string)
     timeout?: number,
     ...args: any[]
   ): number {
-    const handlerWithCleanup: TimerHandler = typeof handler === 'string' ? handler : function(...args: any[]) {
+    const setTimeoutHander = function(...args: any[]) {
       timeoutIdMap.delete(timeoutId)
-      handler(...args)
+      typeof handler === 'function' && handler(...args)
     }
+    const handlerWithCleanup: TimerHandler = typeof handler === 'string' ? handler : setTimeoutHander
     const timeoutId = rawSetTimeout.call(rawWindow, handlerWithCleanup, timeout, ...args)
     timeoutIdMap.set(timeoutId, { handler: handlerWithCleanup, timeout, args })
     return timeoutId

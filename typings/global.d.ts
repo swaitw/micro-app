@@ -312,6 +312,7 @@ declare module '@micro-app/types' {
         loader?: (code: string, url: string) => string
         // html processor
         processHtml?: (code: string, url: string) => string
+        aHrefResolver?: (hrefValue: string, appName: string, appUrl: string) => string
       }>
     }
   }
