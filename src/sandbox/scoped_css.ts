@@ -519,7 +519,8 @@ export default function scopedCSS (
         linkPath,
       )
       const observer = new MutationObserver(() => {
-        const isPrefixed = styleElement.textContent && new RegExp(prefix).test(styleElement.textContent)
+        const escapedPrefix = prefix.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+        const isPrefixed = styleElement.textContent && new RegExp(escapedPrefix).test(styleElement.textContent)
         observer.disconnect()
         if (!isPrefixed) {
           styleElement.__MICRO_APP_HAS_SCOPED__ = false

@@ -133,6 +133,9 @@ function patchDocumentPrototype (appName: string, microAppWindow: microAppWindow
   // query element👇
   function querySelector (this: Document, selectors: string): any {
     const _this = getBindTarget(this)
+    if (selectors === 'body') {
+      return this.body
+    }
     if (
       !selectors ||
       isUniqueElement(selectors) ||
@@ -302,6 +305,9 @@ function patchDocumentProperty (
       configurable: true,
       get: () => {
         throttleDeferForIframeAppName(appName)
+        if (tagName === 'body') {
+          return sandbox.options.container?.querySelector('micro-app-body')
+        }
         return rawDocument[tagName]
       },
       set: (value: unknown) => { rawDocument[tagName] = value },

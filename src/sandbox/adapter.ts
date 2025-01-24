@@ -45,6 +45,7 @@ export class BaseSandbox implements BaseSandboxType {
     // TODO: 是否可以和constants/SCOPE_WINDOW_ON_EVENT合并
     'onpopstate',
     'onhashchange',
+    'event',
   ]
 
   public appName: string
