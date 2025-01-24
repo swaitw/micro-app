@@ -764,7 +764,11 @@ export default class CreateApp implements AppInterface {
    */
   private createSandbox (): void {
     if (this.useSandbox && !this.sandBox) {
-      this.sandBox = this.iframe ? new IframeSandbox(this.name, this.url, { attrs: this.attrs }) : new WithSandBox(this.name, this.url)
+      const iframeOption = {
+        attrs: this.attrs,
+        container: this.container
+      }
+      this.sandBox = this.iframe ? new IframeSandbox(this.name, this.url, iframeOption) : new WithSandBox(this.name, this.url)
     }
   }
 

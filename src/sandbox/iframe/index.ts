@@ -60,6 +60,11 @@ import {
   patchElementTree
 } from '../adapter'
 
+interface IOption {
+  container: HTMLElement | ShadowRoot | null,
+  [key: string]: any
+}
+
 export default class IframeSandbox {
   static activeCount = 0 // number of active sandbox
   private active = false
@@ -81,11 +86,11 @@ export default class IframeSandbox {
   // TODO: 放到 super中定义，super(appName, url)，with沙箱也需要简化
   public appName: string
   public url: string
-  public options?: Record<string, any>
+  public options: IOption
   // reset mount, unmount when stop in default mode
   public clearHijackUmdHooks!: () => void
 
-  constructor (appName: string, url: string, options: Record<string, any>) {
+  constructor (appName: string, url: string, options: IOption) {
     this.appName = appName
     this.url = url
     this.options = options
